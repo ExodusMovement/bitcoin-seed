@@ -59,3 +59,12 @@ test('serialize() / fromBuffer() should serialize to buffer and deserialize from
 
   t.end()
 })
+
+test('fromMnemonic() should generate proper mnemonic / seed pair', function (t) {
+  t.plan(1)
+
+  var bs = bitcoinSeed.fromMnemonic(FIXTURE_MNEMONIC)
+  t.is(bs.seed.toString('hex'), FIXTURE_SEED, 'seed')
+
+  t.end()
+})

@@ -68,3 +68,13 @@ test('fromMnemonic() should generate proper mnemonic / seed pair', function (t) 
 
   t.end()
 })
+
+test('fromMnemonic() should only accept mnemonics of type string', function (t) {
+  t.plan(1)
+
+  t.throws(function () {
+    bitcoinSeed.fromMnemonic(1000)
+  }, /pass type "string"/, 'fromMnemonic w/ non-string')
+
+  t.end()
+})

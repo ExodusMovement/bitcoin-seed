@@ -45,6 +45,7 @@ function fromBuffer (buffer) {
 }
 
 function fromMnemonic (mnemonic, passphrase) {
+  if (typeof mnemonic !== 'string') throw new Error('fromMnemonic(): Must pass type "string" as mnemonic.')
   var bs = create()
   bs.mnemonic = new Buffer(mnemonic, 'utf8')
   bs.seed = bip39.mnemonicToSeed(mnemonic, passphrase)

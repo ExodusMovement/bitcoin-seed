@@ -1,0 +1,44 @@
+{
+  "name": "bitcoin-seed",
+  "version": "0.0.0",
+  "description": "Generate Bitcoin BIP39 seeds as buffers for control of memory.",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "lint": "standard",
+    "test": "npm run lint && npm run unit",
+    "unit": "tape test/*.js | tap-spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exodusmovement/bitcoin-seed.git"
+  },
+  "keywords": [
+    "bip39",
+    "mnemonic",
+    "seed",
+    "master",
+    "key",
+    "bitcoin",
+    "ethereum"
+  ],
+  "author": "JP Richardson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/exodusmovement/bitcoin-seed/issues"
+  },
+  "homepage": "https://github.com/exodusmovement/bitcoin-seed#readme",
+  "devDependencies": {
+    "standard": "7.x",
+    "tap-out": "^1.4.2",
+    "tape": "^4.5.1"
+  },
+  "files": [
+    "./src/index.js"
+  ],
+  "dependencies": {
+    "bip39": "^2.2.0"
+  }
+}

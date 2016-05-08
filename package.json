@@ -36,7 +36,7 @@
     "tape": "^4.5.1"
   },
   "files": [
-    "src/index.js"
+    "src/"
   ],
   "dependencies": {
     "bip39": "^2.2.0"

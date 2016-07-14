@@ -45,17 +45,28 @@ test('destroy() fills buffers with zero', function (t) {
 })
 
 test('serialize() / fromBuffer() should serialize to buffer and deserialize from buffer', function (t) {
-  t.plan(3)
+  t.plan(10)
 
   var entropyFn = function () { return new Buffer(FIXTURE_ENTROPY, 'hex') }
   var bs = bitcoinSeed.fromRandom({ entropyFn: entropyFn })
 
-  var buf = bs.serialize()
-  t.is(buf.toString('hex'), FIXTURE_SEED + new Buffer(FIXTURE_MNEMONIC).toString('hex'), 'SEED + MNEMONIC')
+  var buf = bs.serializeOld()
+  t.is(buf.toString('hex'), FIXTURE_SEED + new Buffer(FIXTURE_MNEMONIC).toString('hex'), 'SEED + MNEMONIC (OLD FORMAT)')
 
   var bs2 = bitcoinSeed.fromBuffer(buf)
   t.is(bs2.seed.toString('hex'), FIXTURE_SEED, 'seed')
   t.is(bs2.mnemonic.toString('utf8'), FIXTURE_MNEMONIC, 'mnemonic')
+  t.is(bs2.entropy.toString('hex'), FIXTURE_ENTROPY, 'entropy')
+  t.is(bs2.mnemonicString, FIXTURE_MNEMONIC, 'mnemonc string')
+
+  buf = bs.serialize()
+  t.is(buf.toString('hex'), FIXTURE_SEED + FIXTURE_ENTROPY, 'SEED + ENTROPY (NEW FORMAT)')
+
+  var bs3 = bitcoinSeed.fromBuffer(buf)
+  t.is(bs3.seed.toString('hex'), FIXTURE_SEED, 'seed')
+  t.is(bs3.mnemonic.toString('utf8'), FIXTURE_MNEMONIC, 'mnemonic')
+  t.is(bs3.entropy.toString('hex'), FIXTURE_ENTROPY, 'entropy')
+  t.is(bs3.mnemonicString, FIXTURE_MNEMONIC, 'mnemonc string')
 
   t.end()
 })

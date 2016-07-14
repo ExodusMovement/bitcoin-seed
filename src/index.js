@@ -19,10 +19,18 @@ function create () {
   }
 
   // => seed || mnemonic
-  bitcoinSeed.serialize = function serialize () {
+  bitcoinSeed.serializeOld = function serialize () {
     var b = new Buffer(this.seed.length + this.mnemonic.length)
     this.seed.copy(b)
     this.mnemonic.copy(b, this.seed.length)
+    return b
+  }
+
+  // => seed || entropy
+  bitcoinSeed.serialize = function serialize () {
+    var b = new Buffer(this.seed.length + this.entropy.length)
+    this.seed.copy(b)
+    this.entropy.copy(b, this.seed.length)
     return b
   }
 
@@ -36,10 +44,24 @@ function create () {
 function fromBuffer (buffer) {
   var bs = create()
   bs.seed = new Buffer(64)
-  bs.mnemonic = new Buffer(buffer.length - 64)
+
+  // retain backwards compatibility with old serialized version
+  var data = new Buffer(buffer.length - 64)
+  buffer.copy(data, 0, 64, buffer.length)
+
+  if (data.length === 16) {
+    bs.mnemonic = new Buffer(bip39.entropyToMnemonic(data.toString('hex')), 'utf8')
+    data.fill(0)
+  } else if (data.length === 32) {
+    bs.mnemonic = new Buffer(bip39.entropyToMnemonic(data.toString('hex')), 'utf8')
+    data.fill(0)
+  } else {
+    bs.mnemonic = data
+  }
+
+  bs.entropy = new Buffer(bip39.mnemonicToEntropy(bs.mnemonic.toString('utf8')), 'hex')
 
   buffer.copy(bs.seed, 0, 0, 64)
-  buffer.copy(bs.mnemonic, 0, 64, buffer.length)
 
   return bs
 }

@@ -1,3 +1,8 @@
+0.1.0 / 2016-07-13
+------------------
+- serializes `entropy` instead of `mnemonic`
+- add `entropy` field, `fromEntropy` method
+
 0.0.4 / 2016-05-07
 ------------------
 - fix files array

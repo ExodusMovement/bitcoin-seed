@@ -30,7 +30,7 @@ test('fromRandom() generates a random seed and mnemonic', function (t) {
 })
 
 test('destroy() fills buffers with zero', function (t) {
-  t.plan(3)
+  t.plan(4)
 
   var entropyFn = function () { return new Buffer(FIXTURE_ENTROPY, 'hex') }
   var bs = bitcoinSeed.fromRandom({ entropyFn: entropyFn })
@@ -39,6 +39,7 @@ test('destroy() fills buffers with zero', function (t) {
 
   t.is(bs.seed.toString('hex'), '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000', 'seed is zero')
   t.is(bs.mnemonic.toString('hex'), '00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000', 'mnemonic is zero')
+  t.is(bs.entropy.toString('hex'), '00000000000000000000000000000000', 'hex')
   t.true(bs.isDestroyed, 'destroyed = true')
 
   t.end()
@@ -86,6 +87,18 @@ test('fromMnemonic() should only accept mnemonics of type string', function (t) 
   t.throws(function () {
     bitcoinSeed.fromMnemonic(1000)
   }, /pass type "string"/, 'fromMnemonic w/ non-string')
+
+  t.end()
+})
+
+test('fromEntropy()', function (t) {
+  t.plan(4)
+
+  var bs = bitcoinSeed.fromEntropy(new Buffer(FIXTURE_ENTROPY, 'hex'))
+  t.is(bs.seed.toString('hex'), FIXTURE_SEED, 'seed')
+  t.is(bs.mnemonic.toString('utf8'), FIXTURE_MNEMONIC, 'mnemonic')
+  t.is(bs.entropy.toString('hex'), FIXTURE_ENTROPY, 'entropy')
+  t.is(bs.mnemonicString, FIXTURE_MNEMONIC, 'mnemonc string')
 
   t.end()
 })

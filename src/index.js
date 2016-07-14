@@ -5,12 +5,22 @@ function create () {
   var bitcoinSeed = Object.create(null)
 
   bitcoinSeed.isDestroyed = false
+  // TODO: remove
   bitcoinSeed.mnemonic = new Buffer(0)
+
+  bitcoinSeed.entropy = new Buffer(0)
   bitcoinSeed.seed = new Buffer(0)
+
+  Object.defineProperty(bitcoinSeed, 'mnemonicString', {
+    get: function () {
+      return bip39.entropyToMnemonic(bitcoinSeed.entropy.toString('hex'))
+    }
+  })
 
   bitcoinSeed.destroy = function destroy () {
     this.seed.fill(0)
     this.mnemonic.fill(0)
+    this.entropy.fill(0)
     this.isDestroyed = true
   }
 
@@ -70,6 +80,17 @@ function fromMnemonic (mnemonic, passphrase) {
   if (typeof mnemonic !== 'string') throw new Error('fromMnemonic(): Must pass type "string" as mnemonic.')
   var bs = create()
   bs.mnemonic = new Buffer(mnemonic, 'utf8')
+  bs.entropy = new Buffer(bip39.mnemonicToEntropy(mnemonic), 'hex')
+  bs.seed = bip39.mnemonicToSeed(mnemonic, passphrase)
+  return bs
+}
+
+function fromEntropy (entropy, passphrase) {
+  if (!Buffer.isBuffer(entropy)) throw new Error('fromEntropy(): Must pass a buffer.')
+  var bs = create()
+  var mnemonic = bip39.entropyToMnemonic(entropy.toString('hex'))
+  bs.mnemonic = new Buffer(mnemonic, 'utf8')
+  bs.entropy = entropy
   bs.seed = bip39.mnemonicToSeed(mnemonic, passphrase)
   return bs
 }
@@ -86,13 +107,14 @@ function fromRandom (options) {
 }
 
 function isBitcoinSeed (bs) {
-  return bs.mnemonic && bs.seed && ('isDestroyed' in bs)
+  return bs.entropy && bs.seed && ('isDestroyed' in bs)
 }
 
 module.exports = {
   create: create,
   isBitcoinSeed: isBitcoinSeed,
   fromBuffer: fromBuffer,
+  fromEntropy: fromEntropy,
   fromMnemonic: fromMnemonic,
   fromRandom: fromRandom
 }

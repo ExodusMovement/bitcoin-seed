@@ -19,7 +19,7 @@ test('isBitcoinSeed() verify if object is a bitcoin seed (duck-type)', function 
 test('fromRandom() generates a random seed and mnemonic', function (t) {
   t.plan(3)
 
-  var entropyFn = function () { return new Buffer(FIXTURE_ENTROPY, 'hex') }
+  var entropyFn = function () { return Buffer.from(FIXTURE_ENTROPY, 'hex') }
   var bs = bitcoinSeed.fromRandom({ entropyFn: entropyFn })
 
   t.is(bs.seed.toString('hex'), FIXTURE_SEED, 'seed')
@@ -32,7 +32,7 @@ test('fromRandom() generates a random seed and mnemonic', function (t) {
 test('destroy() fills buffers with zero', function (t) {
   t.plan(4)
 
-  var entropyFn = function () { return new Buffer(FIXTURE_ENTROPY, 'hex') }
+  var entropyFn = function () { return Buffer.from(FIXTURE_ENTROPY, 'hex') }
   var bs = bitcoinSeed.fromRandom({ entropyFn: entropyFn })
 
   bs.destroy()
@@ -48,11 +48,11 @@ test('destroy() fills buffers with zero', function (t) {
 test('serialize() / fromBuffer() should serialize to buffer and deserialize from buffer', function (t) {
   t.plan(10)
 
-  var entropyFn = function () { return new Buffer(FIXTURE_ENTROPY, 'hex') }
+  var entropyFn = function () { return Buffer.from(FIXTURE_ENTROPY, 'hex') }
   var bs = bitcoinSeed.fromRandom({ entropyFn: entropyFn })
 
   var buf = bs.serializeOld()
-  t.is(buf.toString('hex'), FIXTURE_SEED + new Buffer(FIXTURE_MNEMONIC).toString('hex'), 'SEED + MNEMONIC (OLD FORMAT)')
+  t.is(buf.toString('hex'), FIXTURE_SEED + Buffer.from(FIXTURE_MNEMONIC).toString('hex'), 'SEED + MNEMONIC (OLD FORMAT)')
 
   var bs2 = bitcoinSeed.fromBuffer(buf)
   t.is(bs2.seed.toString('hex'), FIXTURE_SEED, 'seed')
@@ -94,7 +94,7 @@ test('fromMnemonic() should only accept mnemonics of type string', function (t) 
 test('fromEntropy()', function (t) {
   t.plan(4)
 
-  var bs = bitcoinSeed.fromEntropy(new Buffer(FIXTURE_ENTROPY, 'hex'))
+  var bs = bitcoinSeed.fromEntropy(Buffer.from(FIXTURE_ENTROPY, 'hex'))
   t.is(bs.seed.toString('hex'), FIXTURE_SEED, 'seed')
   t.is(bs.mnemonic.toString('utf8'), FIXTURE_MNEMONIC, 'mnemonic')
   t.is(bs.entropy.toString('hex'), FIXTURE_ENTROPY, 'entropy')

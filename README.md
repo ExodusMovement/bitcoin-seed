@@ -2,7 +2,7 @@ bitcoin-seed
 ============
 
 [![NPM Package](https://img.shields.io/npm/v/bitcoin-seed.svg?style=flat-square)](https://www.npmjs.org/package/bitcoin-seed)
-[![Build Status](https://img.shields.io/travis/ExodusMovement/bitcoin-seed.svg?branch=master&style=flat-square)](https://travis-ci.org/ExodusMovement/bitcoin-seed)
+[![GitHub Actions Build](https://img.shields.io/github/workflow/status/ExodusMovement/bitcoin-seed/CI/master?style=flat-square)](https://github.com/ExodusMovement/bitcoin-seed/actions/workflows/ci.yml?query=branch%3Amaster)
 
 ## API
 

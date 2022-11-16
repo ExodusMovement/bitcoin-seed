@@ -1,6 +1,6 @@
 {
   "name": "bitcoin-seed",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Generate Bitcoin BIP39 seeds as buffers for control of memory.",
   "main": "src/index.js",
   "directories": {
